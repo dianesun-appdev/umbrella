@@ -16,8 +16,6 @@ location =  gmaps_parse["results"][0]["geometry"]["location"]
 gmaps_lat = location["lat"]
 gmaps_lng = location["lng"]
 
-p location
-
 ##### get weather  
 pirate_endpoint = URI.open("https://api.pirateweather.net/forecast/#{ENV.fetch("PIRATE_WEATHER_KEY")}/#{gmaps_lat},#{gmaps_lng}")
 
@@ -33,10 +31,23 @@ hourly_weather = pirate_parse["hourly"]["data"]
 p "The current temperature is #{current_temp}F and the current weather is #{current_weather.downcase}."
 
 #next 12 hrs 
-hourly_weather.each do |hour_forecast|
-  hour_time = Time.at(hour_forecast["time"])  
+hourly_weather[1..13].each do |hour_forecast|
+  hour_time = Time.at(hour_forecast["time"]) - (5*60*60) #hard code converting GMT to CST  
   hour_time_format = hour_time.strftime("%I %p") 
-  chance_rain = hour_forecast["precipProbability"
+  chance_rain = hour_forecast["precipProbability"]
 
-  p hour_time_format
+  #set a flag if it will rain 
+  if chance_rain >= 0.1
+    umbrella_flag = " You might want to bring an umbrella!"
+  else 
+    umbrella_flag = nil
+  end
+
+  #print the message
+  p "#{hour_time_format} CST: The probability of rain is #{chance_rain*100}%.#{umbrella_flag}"
 end 
+
+#### Bonus stuff - cursed ascii plotting 
+#ChatGPT HATES this one weird trick!
+
+
