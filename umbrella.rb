@@ -1,7 +1,8 @@
 
 require "open-uri"
 require "json"
-require 'cgi'
+require "cgi"
+require "ascii_charts"
 
 ##### Get user input 
 p "Do you need an umbrella today? Enter your location."
@@ -30,11 +31,16 @@ hourly_weather = pirate_parse["hourly"]["data"]
 #current weather
 p "The current temperature is #{current_temp}F and the current weather is #{current_weather.downcase}."
 
-#next 12 hrs 
-hourly_weather[1..13].each do |hour_forecast|
+# print next 12 hrs & store data for plotting
+barchart_data = []
+
+hourly_weather[1..12].each_with_index do |hour_forecast, index|
+  
+  #store all the relevant data 
   hour_time = Time.at(hour_forecast["time"]) - (5*60*60) #hard code converting GMT to CST  
   hour_time_format = hour_time.strftime("%I %p") 
   chance_rain = hour_forecast["precipProbability"]
+  barchart_data.push([index+1,chance_rain.round(2)])
 
   #set a flag if it will rain 
   if chance_rain >= 0.1
@@ -44,10 +50,12 @@ hourly_weather[1..13].each do |hour_forecast|
   end
 
   #print the message
-  p "#{hour_time_format} CST: The probability of rain is #{chance_rain*100}%.#{umbrella_flag}"
+ # p "#{hour_time_format} CST: The probability of rain is #{chance_rain*100}%.#{umbrella_flag}"
 end 
 
 #### Bonus stuff - cursed ascii plotting 
 #ChatGPT HATES this one weird trick!
 
+p "Here is a barchart showing precipiation chance for the next 12 hours:"
 
+puts AsciiCharts::Cartesian.new(barchart_data, :bar => true).draw

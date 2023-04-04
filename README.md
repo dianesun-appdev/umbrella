@@ -95,7 +95,7 @@ Here are some less familiar methods that will be useful:
     
 ## Stretch goal
   
-Use [the ascii_charts gem](https://github.com/benlund/ascii_charts) to produce output that includes a chart, like this:
+Use [the ascii_charts gem](https://github.com/benlund/asciigem_charts) to produce output that includes a chart, like this:
   
 ```
 ========================================
