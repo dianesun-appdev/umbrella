@@ -39,7 +39,7 @@ hourly_weather[1..12].each_with_index do |hour_forecast, index|
   #store all the relevant data 
   hour_time = Time.at(hour_forecast["time"]) - (5*60*60) #hard code converting GMT to CST  
   hour_time_format = hour_time.strftime("%I %p") 
-  chance_rain = hour_forecast["precipProbability"]
+  chance_rain = hour_forecast["precipProbability"].round(2)
   barchart_data.push([index+1,chance_rain.round(2)])
 
   #set a flag if it will rain 
@@ -50,7 +50,7 @@ hourly_weather[1..12].each_with_index do |hour_forecast, index|
   end
 
   #print the message
- # p "#{hour_time_format} CST: The probability of rain is #{chance_rain*100}%.#{umbrella_flag}"
+  p "#{hour_time_format} CST: The probability of rain is #{chance_rain*100}%.#{umbrella_flag}"
 end 
 
 #### Bonus stuff - cursed ascii plotting 
